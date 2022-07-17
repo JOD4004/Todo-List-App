@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block home %}
+<html>
+<head>
+    <title>Main</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body style="background-color: black;margin-left: 2%;margin-right: 2%;margin-top: 2%;">
+    <!-- Header -->
+    <p style="border-style: solid; color: white; text-align: center;font-size: larger;"><b>TODO LIST</b></p>
+    <!-- Main -->
+    <div  style="max-width: 100%; color: white; text-align: center;">
+
+        <!-- Task Input -->
+        <form  action="/" method="post" >
+            {% csrf_token %} 
+            {{form.task}}
+            <input style="border-radius: 15px;" class='btn btm-sm btn-info' type='submit' name='add' value="add" > 
+        </form>
+        <hr>
+     <!--Task Display  -->
+    {% for val in values %}
+        
+        {% if val.complete == True %}
+        <s>
+            <p style="font-size:24 ;">{{val}}</p><br>
+        </s>
+        {{val.created}}
+        
+        {% else %}
+        <span>
+            <p style="font-size:24 ;">{{val}}</p><br>
+        </span>
+        {{val.created}}
+        
+        {% endif %}
+        <!-- Delete and Update Buttons -->
+        <form action="{% url 'deldata' val.id %}" method="POST" class="in-line">
+            {% csrf_token %}
+            <input class='btn btm-sm btn-danger' type="submit" name="delete" value="Delete">
+            <a  class='btn btm-sm btn-info' href="{% url 'update' val.id %}" >Update</a>
+        </form>
+        <hr>
+        
+    {% endfor %}
+    </div>
+    {% endblock %}
+</body>
+</html>
+
